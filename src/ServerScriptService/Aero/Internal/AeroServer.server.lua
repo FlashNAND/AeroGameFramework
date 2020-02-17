@@ -132,6 +132,27 @@ function AeroServer:WrapModule(tbl)
 end
 
 
+-- mod
+function AeroServer:WrapMiddleclass(tbl)
+	assert(type(tbl) == "table", "Expected table for argument")
+	tbl._events = {}
+	--setmetatable(tbl, mt)
+	tbl:include(AeroServer)
+
+	if (type(tbl.Init) == "function" and not tbl.__aeroPreventInit) then
+		tbl:Init()
+	end
+	if (type(tbl.Start) == "function" and not tbl.__aeroPreventStart) then
+		if (modulesAwaitingStart) then
+			modulesAwaitingStart[#modulesAwaitingStart + 1] = tbl
+		else
+			SpawnNow(tbl.Start, tbl)
+		end
+	end
+end
+--mod
+
+
 function AeroServer:CacheClientMethod(methodName, ttl)
 	assert(self._clientCaches, "CacheClientMethod must be called within Init method")
 	assert(type(methodName) == "string", "CacheClientMethod argument #1 must be a string")
@@ -151,7 +172,13 @@ local function LazyLoadSetup(tbl, folder)
 				local obj = require(child)
 				rawset(t, i, obj)
 				if (type(obj) == "table") then
-					AeroServer:WrapModule(obj)
+					-- mods
+					if obj.__aeroMiddleclass then
+						AeroServer:WrapMiddleclass(obj)
+					else
+						AeroServer:WrapModule(obj)
+					end
+					-- mods
 				end
 				return obj
 			elseif (child:IsA("Folder")) then

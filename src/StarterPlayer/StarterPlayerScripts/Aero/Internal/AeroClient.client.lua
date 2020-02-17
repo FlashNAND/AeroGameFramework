@@ -70,6 +70,27 @@ function Aero:WrapModule(tbl)
 end
 
 
+-- mod
+function AeroServer:WrapMiddleclass(tbl)
+	assert(type(tbl) == "table", "Expected table for argument")
+	tbl._events = {}
+	--setmetatable(tbl, mt)
+	tbl:include(AeroServer)
+
+	if (type(tbl.Init) == "function" and not tbl.__aeroPreventInit) then
+		tbl:Init()
+	end
+	if (type(tbl.Start) == "function" and not tbl.__aeroPreventStart) then
+		if (modulesAwaitingStart) then
+			modulesAwaitingStart[#modulesAwaitingStart + 1] = tbl
+		else
+			SpawnNow(tbl.Start, tbl)
+		end
+	end
+end
+--mod
+
+
 local function LoadService(serviceFolder, servicesTbl)
 	local service = {}
 	servicesTbl[serviceFolder.Name] = service
@@ -158,7 +179,13 @@ local function LazyLoadSetup(tbl, folder)
 				local obj = require(child)
 				rawset(t, i, obj)
 				if (type(obj) == "table") then
-					Aero:WrapModule(obj)
+					-- mods
+					if obj.__aeroMiddleclass then
+						Aero:WrapMiddleclass(obj)
+					else
+						Aero:WrapModule(obj)
+					end
+					-- mods
 				end
 				return obj
 			elseif (child:IsA("Folder")) then
