@@ -71,11 +71,11 @@ end
 
 
 -- mod
-function AeroServer:WrapMiddleclass(tbl)
+function Aero:WrapMiddleclass(tbl)
 	assert(type(tbl) == "table", "Expected table for argument")
 	tbl._events = {}
 	--setmetatable(tbl, mt)
-	tbl:include(AeroServer)
+	tbl:include(Aero)
 
 	if (type(tbl.Init) == "function" and not tbl.__aeroPreventInit) then
 		tbl:Init()
@@ -181,6 +181,7 @@ local function LazyLoadSetup(tbl, folder)
 				if (type(obj) == "table") then
 					-- mods
 					if obj.__aeroMiddleclass then
+						print'WRAPPED MIDDLE CLASS'
 						Aero:WrapMiddleclass(obj)
 					else
 						Aero:WrapModule(obj)
