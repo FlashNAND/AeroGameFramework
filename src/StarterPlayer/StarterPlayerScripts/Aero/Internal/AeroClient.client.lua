@@ -56,9 +56,9 @@ end
 function Aero:WrapModule(tbl)
 	assert(type(tbl) == "table", "Expected table for argument")
 	tbl._events = {}
-	if not tbl.__aeroMixin then
+	--if not tbl.__aeroMixin then
 		setmetatable(tbl, mt)
-	end
+	--end
 	if (type(tbl.Init) == "function" and not tbl.__aeroPreventInit) then
 		tbl:Init()
 	end
