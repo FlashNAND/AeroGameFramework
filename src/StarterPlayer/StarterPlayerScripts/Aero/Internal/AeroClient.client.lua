@@ -188,6 +188,7 @@ local function LazyLoadSetup(tbl, folder)
 					else
 						Aero:WrapModule(obj)
 					end
+					LazyLoadSetup(obj, child)
 					-- mods
 				end
 				return obj

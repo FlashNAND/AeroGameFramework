@@ -15,7 +15,11 @@ function TestClass:initialize()
         print('Middleclass works with Aero!!!!!!')
     end)
 
-    self:StartFade()
+    self:StartThread()
+end
+
+function TestClass:Init()
+
 end
 
 return TestClass

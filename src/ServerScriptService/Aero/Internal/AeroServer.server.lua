@@ -180,6 +180,7 @@ local function LazyLoadSetup(tbl, folder)
 					else
 						AeroServer:WrapModule(obj)
 					end
+					LazyLoadSetup(obj, child)
 					-- mods
 				end
 				return obj

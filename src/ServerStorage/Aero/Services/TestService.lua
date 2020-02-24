@@ -1,12 +1,12 @@
-local TestController = {}
+local TestService = {Client={}}
 
 local TestClass
 
-function TestController:Start()
+function TestService:Start()
     TestClass = self.Modules.TestClass
 
     local instance = TestClass:new()
 end
 
 
-return TestController
+return TestService
