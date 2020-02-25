@@ -182,11 +182,12 @@ local function LazyLoadSetup(tbl, folder)
 				rawset(t, i, obj)
 				if (type(obj) == "table") then
 					-- mods
-					if obj.__aeroMiddleclass then
-						print'WRAPPED MIDDLE CLASS'
-						Aero:WrapMiddleclass(obj)
-					else
-						Aero:WrapModule(obj)
+					if not obj.__aeroIgnore then
+						if obj.__aeroMiddleclass then
+							Aero:WrapMiddleclass(obj)
+						else
+							Aero:WrapModule(obj)
+						end
 					end
 					-- mods
 				end
