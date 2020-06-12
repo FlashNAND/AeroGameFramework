@@ -66,7 +66,10 @@ function Aero:WrapModule(tbl)
 		if (modulesAwaitingStart) then
 			modulesAwaitingStart[#modulesAwaitingStart + 1] = tbl
 		else
-			SpawnNow(tbl.Start, tbl)
+			--spawn(function()
+				tbl:Start()
+			--end)
+			--SpawnNow(tbl.Start, tbl)
 		end
 	end
 end
@@ -86,7 +89,10 @@ function Aero:WrapMiddleclass(tbl)
 		if (modulesAwaitingStart) then
 			modulesAwaitingStart[#modulesAwaitingStart + 1] = tbl
 		else
-			SpawnNow(tbl.Start, tbl)
+			--spawn(function()
+				tbl:Start()
+			--end)
+			--SpawnNow(tbl.Start, tbl)
 		end
 	end
 end
@@ -222,7 +228,10 @@ end
 local function StartController(controller)
 	-- Start controllers on separate threads:
 	if (type(controller.Start) == "function") then
-		SpawnNow(controller.Start, controller)
+		--spawn(function()
+			controller:Start()
+		--end)
+		--SpawnNow(controller.Start, controller)
 	end
 end
 
@@ -282,7 +291,10 @@ local function Init()
 	-- Start modules that were already loaded:
 	local function StartLoadedModules()
 		for _,tbl in pairs(modulesAwaitingStart) do
-			SpawnNow(tbl.Start, tbl)
+			--spawn(function()
+				tbl:Start()
+			--end)
+			--SpawnNow(tbl.Start, tbl)
 		end
 		modulesAwaitingStart = nil
 	end
